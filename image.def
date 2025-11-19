@@ -21,7 +21,7 @@ From: rootproject/root:latest
 %files
     pyproject.toml /app/pyproject.toml
     README.md /app/README.md
-    src/ /app/src/
+    lt_separation/ /app/lt_separation/
 
 %environment
     export PATH=/opt/venv/bin:$PATH

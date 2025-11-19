@@ -26,7 +26,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["lt_separation"]
 
 [tool.black]
 line-length = 88
