@@ -1,0 +1,39 @@
+Bootstrap: docker
+From: rootproject/root:latest
+
+%post
+    apt-get update && apt-get -y upgrade
+    apt-get -y install git
+    apt-get -y install nlohmann-json3-dev
+
+    apt-get install -y --no-install-recommends \
+        python3 python3-venv python3-pip libffi-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+    python3 -m venv /opt/venv
+    . /opt/venv/bin/activate
+    pip install --upgrade pip
+
+    # Install the lt_separation package using pyproject.toml
+    cd /app
+    pip install .
+
+%files
+    pyproject.toml /app/pyproject.toml
+    README.md /app/README.md
+    src/ /app/src/
+
+%environment
+    export PATH=/opt/venv/bin:$PATH
+
+%test
+    echo "=== Running container self-test ==="
+    which python
+    python --version
+    python -c "import lt_separation; print('Package import works!')"
+    python -c "import ROOT; print('ROOT import works!')"
+    root -l -b -q -e "std::cout << gROOT->GetVersion() << std::endl;"
+    echo "=== All tests passed ==="
+
+%runscript
+    exec /bin/bash
